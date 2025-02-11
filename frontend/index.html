@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Location Tracking</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4">
+        <nav class="container mx-auto flex justify-between">
+            <div class="text-lg font-bold">Live Location Tracking</div>
+            <div class="grid grid-cols-2 gap-4">
+                <ul class="flex space-x-4">
+                    <li><a href="#features" class="nav-link hover:underline">Features</a></li>
+                    <li><a href="#contact" class="nav-link hover:underline">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gray-100 h-screen flex items-center justify-center">
+        <div class="text-center">
+            <h1 class="text-5xl font-bold">Welcome to Live Location Tracking</h1>
+            <p class="mt-4 text-lg">Track your location in real-time with our innovative application.</p>
+            <a href="#features" class="mt-6 inline-block bg-blue-600 text-white py-2 px-4 rounded btn-hover">Get Started</a>
+            <button class="mt-6 bg-blue-600 text-white py-2 px-4 rounded" id="locationButton">Get Current Location</button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="container mx-auto my-16">
+        <h2 class="text-3xl font-bold text-center">Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+            <div class="p-4 border rounded shadow feature-card">
+                <h3 class="font-semibold">Real-Time Updates</h3>
+                <p>Stay updated with live location tracking.</p>
+            </div>
+            <div class="p-4 border rounded shadow feature-card">
+                <h3 class="font-semibold">AI/ML Integration</h3>
+                <p>Utilize advanced algorithms for better tracking.</p>
+            </div>
+            <div class="p-4 border rounded shadow feature-card">
+                <h3 class="font-semibold">Battery Optimization</h3>
+                <p>Efficiently manage battery usage while tracking.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2023 Live Location Tracking. All rights reserved.</p>
+            <p>Contact us: info@example.com</p>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
