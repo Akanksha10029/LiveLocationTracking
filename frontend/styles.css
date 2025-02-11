@@ -1,0 +1,27 @@
+/* styles.css */
+
+.btn {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.btn:hover {
+    transform: scale(1.1);
+    background-color: #1c4992; /* Darker blue */
+}
+.feature-card {
+    transition: box-shadow 0.3s ease;
+}
+.feature-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.nav-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+.nav-link:hover {
+    box-shadow: 2px 2px 5px rgba(56, 54, 54, 0.1); /* Light shadow effect */
+    transition: box-shadow;
+    transition-duration: 0.3s;
+    
+}
