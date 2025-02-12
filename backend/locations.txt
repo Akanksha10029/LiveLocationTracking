@@ -6,3 +6,7 @@ Latitude: 30.766395170583035, Longitude: 76.61148191025282, Timestamp: 2025-02-1
 Latitude: 30.766395170583035, Longitude: 76.61148191025282, Timestamp: 2025-02-11T16:04:23.665Z
 Latitude: 30.766369639613863, Longitude: 76.61141567432925, Country: India, Locality: Kharar, Date: 2025-02-11T16:39:27.860Z, Timestamp: 2025-02-11T16:39:27.917Z
 Latitude: 30.766518029469058, Longitude: 76.61167049523705, Country: India, Locality: Kharar, Date: 2025-02-11T16:47:59.439Z, Timestamp: 2025-02-11T16:47:59.455Z
+Latitude: 30.766370125424807, Longitude: 76.6112308114783, Country: India, Locality: Kharar, Date: 2025-02-12T12:34:02.617Z, Timestamp: 2025-02-12T12:34:02.737Z
+Latitude: 30.766370125424807, Longitude: 76.6112308114783, Country: India, Locality: Kharar, Date: 2025-02-12T12:37:10.921Z, Timestamp: 2025-02-12T12:37:10.933Z
+Latitude: 30.766370125424807, Longitude: 76.6112308114783, Country: India, Locality: Kharar, Date: 2025-02-12T12:46:51.201Z, Timestamp: 2025-02-12T12:46:51.301Z
+Latitude: 30.766531818293657, Longitude: 76.61122552065854, Country: India, Locality: Kharar, Date: 2025-02-12T13:11:20.325Z, Timestamp: 2025-02-12T13:11:20.406Z
