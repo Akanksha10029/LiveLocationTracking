@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // reverse geocoding 
     let apiEndpoint = 'https://api.opencagedata.com/geocode/v1/json'; // OpenCage API endpoint
     let opencageApiKey = null; // good practice to store API keys in environment variables and not in code for security reasons and initialize to null
+    let googleMapsApiKey = null; 
 
     const getUserCurrentLocation = async (lat, lon) => {
         console.log('Getting user location...');
@@ -34,10 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        const apiURL = await fetch(`${apiEndpoint}?q=${lat}+${lon}&key=${opencageApiKey}&preety=1`);
         try{
+            const apiURL = await fetch(`${apiEndpoint}?q=${lat}+${lon}&key=${opencageApiKey}&pretty=1`);
             const response = await apiURL.json();
-            console.log(response);
+            console.log('OpenCage Response:', response);
+
             const {continent, country, state, state_district, city, postcode, county, road_type } = response.results[0].components;
             fullAddress.textContent = `User Address: continent: ${continent}, country: ${country}, state: ${state}, state district: ${state_district}, city: ${city}, PIN Code: ${postcode}, Locality: ${county}, road type: ${road_type}`;
             formattedAddress.textContent = `Formatted Address: ${response.results[0].formatted}`;
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('error', error);
         }  
     }
-
+    // When user clicks "Get Current Location" button 
     locationButton.addEventListener('click', () => {
         
         if (navigator.geolocation) {
@@ -64,6 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
             lat_long.textContent = `Latitude: ${lat}, Longitude: ${lon}`;
 
             getUserCurrentLocation(lat, lon);
+
+            // After we have the coords, fetch the Google Maps key and load the map
+            fetchGoogleMapsKeyAndInit(lat, lon);
     }
     
     function showError(error) {
@@ -78,56 +83,75 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Geolocation Error:", error.message);
     }
 
-        // Fetch API Key for Google Maps
-        // fetch('http://127.0.0.1:5000/api/google-maps-key')
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         const googleMapsApiKey = data.apiKey;
-        //         loadGoogleMaps(googleMapsApiKey, lat, lon);
-        //     })
-        //     .catch(error => console.error('Error fetching API key:', error));
+    // Fetch Google Maps Key, then inject <script> with callback
+    function fetchGoogleMapsKeyAndInit(lat, lon) {
+        // Only fetch if we haven't already
+        if (googleMapsApiKey) {
+        // Already have the key, just init the map
+        loadGoogleMaps(googleMapsApiKey, lat, lon);
+        } else {
+        fetch('http://localhost:5000/api/google-maps-key')
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+            })
+            .then(data => {
+            if (!data.apiKey) {
+                throw new Error('Google Maps API Key is missing in response');
+            }
+            googleMapsApiKey = data.apiKey;
+            loadGoogleMaps(googleMapsApiKey, lat, lon);
+            })
+            .catch(error => console.error('Error fetching Google Maps key:', error));
+        }
+    }
 
-    // function loadGoogleMaps(apiKey, lat, lon) {
-    //     if (!apiKey || apiKey === "undefined") {
-    //         console.error("Google Maps API Key is missing!");
-    //         alert("Error: Google Maps API Key is missing!");
-    //         return;
-    //     }
+    // Dynamically create the <script> tag and pass the init callback
+    function loadGoogleMaps(apiKey, lat, lon) {
+        // If Google Maps is already loaded, just call init
+        // Use optional chaining to check if google maps is already loaded
+        if (window.google?.maps) {
+            initMap(lat, lon);
+            return;
+        }
 
-    //     if (!window.google) {
-    //         const script = document.createElement('script');
-    //         script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-    //         script.async = true;
-    //         script.defer = true;
-    //         document.body.appendChild(script);
+        // Otherwise, create the script tag
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMapFromScript`;
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
 
-    //         // Set initMap function after Google Maps loads
-    //         window.initMap = () => initMap(lat, lon);
-    //     } else {
-    //         initMap(lat, lon);
-    //     }
-    // }
+        // We define a global function that Google Maps calls on load
+        window.initMapFromScript = () => initMap(lat, lon);
+    }
 
-    // function initMap(lat, lon) {
-    //     console.log("Initializing Google Maps...");
-    //     const mapDiv = document.getElementById("map");
+    // Initialize the map with the user's coordinates
+    function initMap(lat, lon) {
+        console.log('Initializing Google Maps...');
+        const mapDiv = document.getElementById('map');
 
-    //     if (!mapDiv) {
-    //         console.error("Map container not found!");
-    //         return;
-    //     }
+        if (!mapDiv) {
+        console.error('Map container not found!');
+        return;
+        }
 
-    //     const map = new google.maps.Map(mapDiv, {
-    //         center: { lat, lng: lon },
-    //         zoom: 15,
-    //     });
+        const userLatLng = { lat, lng: lon };
 
-    //     new google.maps.Marker({
-    //         position: { lat, lng: lon },
-    //         map: map,
-    //         title: "You are here!",
-    //     });
-    // }
+        const map = new google.maps.Map(mapDiv, {
+        center: userLatLng,
+        zoom: 15,
+        });
 
+        /// Use the new AdvancedMarkerElement as recommended
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+        map: map,
+        position: userLatLng,
+        title: 'You are here!',
+        });
+    }
+        
   
 });

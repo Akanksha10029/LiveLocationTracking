@@ -1,5 +1,5 @@
 require('dotenv').config();
-// console.log('OpenCage Key from .env:', process.env.OPENCAGE_API_KEY); // debug
+// console.log('OpenCage Key from .env:', process.env.OPENCAGE_API_KEY); // for debugging
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -12,10 +12,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/locationDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect('mongodb://localhost:27017/locationDB')
+
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
 
