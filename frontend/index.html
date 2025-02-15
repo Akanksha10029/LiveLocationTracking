@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Location Tracking</title>
+    <!-- Google Maps JavaScript API -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRMyZrW0sRAsO65UGGWsytunqQSVPvheU" async defer></script> -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -26,8 +29,19 @@
         <div class="text-center">
             <h1 class="text-5xl font-bold">Welcome to Live Location Tracking</h1>
             <p class="mt-4 text-lg">Track your location in real-time with our innovative application.</p>
-            <a href="#features" class="mt-6 inline-block bg-blue-600 text-white py-2 px-4 rounded btn-hover">Get Started</a>
-            <button class="mt-6 bg-blue-600 text-white py-2 px-4 rounded" id="locationButton">Get Current Location</button>
+            <!-- <a href="#features" class="mt-6 inline-block bg-blue-600 text-white py-2 px-4 rounded btn-hover">Get Started</a> -->
+            <button class=" btn mt-6 bg-blue-600 text-white py-2 px-4 rounded" id="locationButton">Get Current Location</button>
+            
+            <div class="location-info">
+                <p id="lat-long"></p>
+                <p id="full-address"></p>
+                <p id="formatted-address"></p>
+            </div>
+              
+            
+            <!-- Map Container -->
+            <div id="map"></div>
+
         </div>
     </section>
 
@@ -53,8 +67,8 @@
     <!-- Footer -->
     <footer id="contact" class="bg-blue-600 text-white p-4">
         <div class="container mx-auto text-center">
-            <p>&copy; 2023 Live Location Tracking. All rights reserved.</p>
-            <p>Contact us: info@example.com</p>
+            <p>&copy; 2025 Live Location Tracking. All rights reserved.</p>
+            <p>Contact us: akanksharani405@gmail.com</p>
         </div>
     </footer>
 
