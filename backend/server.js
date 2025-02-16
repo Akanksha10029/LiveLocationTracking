@@ -33,16 +33,39 @@ app.get('/api/google-maps-key', (req, res) => {
     res.json({ apiKey: process.env.GOOGLE_MAPS_API_KEY });
 });
 
-app.post('/api/location', async (req, res) => {
+app
+.post('/api/location', async (req, res) => {
     console.log("Received Data:", req.body);
 
-    const { latitude, longitude, country, locality, date } = req.body;
+    const { latitude, 
+        longitude, 
+        continent, 
+        country, 
+        state, 
+        state_district, 
+        city, 
+        postcode, 
+        county, 
+        road_type,
+        locality, 
+        date } = req.body;
 
     try {
-        const newLocation = new Location({ latitude, longitude, country, locality, date });
+        const newLocation = new Location({ latitude, 
+            longitude, 
+            continent, 
+            country, 
+            state, 
+            state_district, 
+            city, 
+            postcode, 
+            county, 
+            road_type, 
+            locality, 
+            date });
         await newLocation.save();
 
-        fs.appendFile('locations.txt', `Latitude: ${latitude}, Longitude: ${longitude}, Country: ${country}, Locality: ${locality}, Date: ${date}\n`, (err) => {
+        fs.appendFile('locations.txt',  `Latitude: ${latitude}, Longitude: ${longitude}, Continent: ${continent}, Country: ${country}, State: ${state}, State District: ${state_district}, City: ${city}, PIN Code: ${postcode}, Locality: ${county}, Road Type: ${road_type}, Date: ${date}\n`, (err) => {
             if (err) {
                 console.error('Error writing to file:', err);
                 return res.status(500).send('Error saving location');

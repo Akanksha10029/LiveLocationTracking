@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                 console.error('Error fetching API key:', error);
-                return;
+                throw error;;
             }
         }
         
@@ -43,14 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const {continent, country, state, state_district, city, postcode, county, road_type } = response.results[0].components;
             fullAddress.textContent = `User Address: continent: ${continent}, country: ${country}, state: ${state}, state district: ${state_district}, city: ${city}, PIN Code: ${postcode}, Locality: ${county}, road type: ${road_type}`;
             formattedAddress.textContent = `Formatted Address: ${response.results[0].formatted}`;
+             // Return the address data so it can be used for the POST
+            return { continent, country, state, state_district, city, postcode, county, road_type };
         }
         catch(error){
             console.log('error', error);
+            throw error; 
         }  
     }
     // When user clicks "Get Current Location" button 
-    locationButton.addEventListener('click', () => {
-        
+    locationButton.addEventListener('click', (e) => {
+        e.preventDefault();
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
@@ -65,7 +68,39 @@ document.addEventListener('DOMContentLoaded', () => {
             const lon = position.coords.longitude;
             lat_long.textContent = `Latitude: ${lat}, Longitude: ${lon}`;
 
-            getUserCurrentLocation(lat, lon);
+            // Fetch reverse geocoding details
+            getUserCurrentLocation(lat, lon)
+            .then((addressData) => {
+                
+                const locationData = {
+                    latitude: lat,
+                    longitude: lon,
+                    continent: addressData.continent,
+                    country: addressData.country,
+                    state: addressData.state,
+                    state_district: addressData.state_district,
+                    city: addressData.city,
+                    postcode: addressData.postcode,
+                    road_type: addressData.road_type,
+                    locality: addressData.county, // or whichever you prefer
+                    date: new Date().toISOString()
+                };
+
+                // POST the location data to your server
+                fetch('http://localhost:5000/api/location', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(locationData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Stored location:', data);
+                })
+                .catch(error => console.error('Error storing location:', error));
+            })
+            .catch(error => console.error('Error in reverse geocoding:', error));
 
             // After we have the coords, fetch the Google Maps key and load the map
             fetchGoogleMapsKeyAndInit(lat, lon);
