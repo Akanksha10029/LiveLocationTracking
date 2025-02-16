@@ -52,14 +52,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }  
     }
     // When user clicks "Get Current Location" button 
+
     locationButton.addEventListener('click', (e) => {
         e.preventDefault();
+        
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition, showError);
         } else {
             console.log('Geolocation is not supported by this browser.');
         }
     });
+
 
     function showPosition(position) {
             console.log(position);
@@ -85,20 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     locality: addressData.county, // or whichever you prefer
                     date: new Date().toISOString()
                 };
+            
+            // POST the location data to your server
+            fetch('http://localhost:5000/api/location', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(locationData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Stored location:', data);
+                // Update UI with persisted data
+                lat_long.textContent = `Latitude: ${currentLocationData.latitude}, Longitude: ${currentLocationData.longitude}`;
+                fullAddress.textContent = `User Address: continent: ${currentLocationData.continent}, country: ${currentLocationData.country}, state: ${currentLocationData.state}, state district: ${currentLocationData.state_district}, city: ${currentLocationData.city}, PIN Code: ${currentLocationData.postcode}, Locality: ${currentLocationData.locality}, road type: ${currentLocationData.road_type}`;
+                formattedAddress.textContent = `Formatted Address: ${currentLocationData.city}, ${currentLocationData.state}, ${currentLocationData.country}`;
+            })
+            .catch(error => console.error('Error storing location:', error));
 
-                // POST the location data to your server
-                fetch('http://localhost:5000/api/location', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(locationData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Stored location:', data);
-                })
-                .catch(error => console.error('Error storing location:', error));
             })
             .catch(error => console.error('Error in reverse geocoding:', error));
 
